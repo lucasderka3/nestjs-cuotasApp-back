@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlaneDto } from './dto/create-plane.dto';
 import { UpdatePlaneDto } from './dto/update-plane.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Plan } from './entities/plan.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PlanesService {
-  create(createPlaneDto: CreatePlaneDto) {
-    return 'This action adds a new plane';
+
+  constructor(
+    @InjectRepository(Plan)
+    private readonly planRepository: Repository<Plan>
+  ){}
+
+
+  async create(createPlaneDto: CreatePlaneDto) {
+    const nuevoPlan = await this.planRepository.create({
+      nombre: createPlaneDto.nombre,
+      descripcion: createPlaneDto.descripcion,
+      precio: createPlaneDto.precio,
+      frecuencia_pago: createPlaneDto.frecuenciaPago,
+      activo: true
+    })
+
+    return this.planRepository.save(nuevoPlan);
   }
 
-  findAll() {
-    return `This action returns all planes`;
+  async findAll() {
+    return await this.planRepository.find({
+      where: { activo: true},
+      order: { id: 'ASC'}
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plane`;
+  async findOne(id: number) {
+    const plan = await this.planRepository.findOne({ where: { id } })
+    if(!plan) throw new NotFoundException('Plan no encontrado')
+    return plan;
   }
 
-  update(id: number, updatePlaneDto: UpdatePlaneDto) {
-    return `This action updates a #${id} plane`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} plane`;
+  async remove(id: number) {
+    const plan = await this.findOne(id);
+    return this.planRepository.remove(plan);
   }
 }

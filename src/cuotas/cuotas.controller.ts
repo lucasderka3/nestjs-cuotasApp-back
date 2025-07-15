@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CuotasService } from './cuotas.service';
 import { CreateCuotaDto } from './dto/create-cuota.dto';
-import { UpdateCuotaDto } from './dto/update-cuota.dto';
+
 
 @Controller('cuotas')
 export class CuotasController {
@@ -18,17 +18,13 @@ export class CuotasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cuotasService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.cuotasService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCuotaDto: UpdateCuotaDto) {
-    return this.cuotasService.update(+id, updateCuotaDto);
-  }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cuotasService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.cuotasService.remove(id);
   }
 }

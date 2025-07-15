@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePagoDto } from './dto/create-pago.dto';
-import { UpdatePagoDto } from './dto/update-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pago } from './entities/pago.entity';
 import { Repository } from 'typeorm';
@@ -51,18 +50,43 @@ export class PagosService {
   }
 
   findAll() {
-    return `This action returns all pagos`;
+    return this.pagoRepository.find({ relations: ['cuota']});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pago`;
+  async findOne(id: number) {
+    const pago = await this.pagoRepository.findOne({
+      where: {id},
+      relations: ['cuota']
+    })
+
+    if(!pago){
+      throw new NotFoundException('Pago no encontrado')
+    }
+
+    return pago;
   }
 
-  update(id: number, updatePagoDto: UpdatePagoDto) {
-    return `This action updates a #${id} pago`;
+
+  async remove(id: number) {
+    const pago = await this.pagoRepository.findOne({where: {id}});
+    
+    if(!pago){
+      throw new NotFoundException('Pago no encontrado')
+    }
+
+    await this.pagoRepository.remove(pago);
+
+    return { message: 'Pago eliminado correctamente'}
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pago`;
+  async findByCuota(cuotaId: number){
+    const pagos = await this.pagoRepository.find({
+      where: {cuota: {id: cuotaId}},
+      relations: ['cuota']
+    });
+
+    return pagos;
   }
+
 }

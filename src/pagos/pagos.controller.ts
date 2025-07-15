@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import { CreatePagoDto } from './dto/create-pago.dto';
-import { UpdatePagoDto } from './dto/update-pago.dto';
 
 @Controller('pagos')
 export class PagosController {
@@ -18,17 +17,18 @@ export class PagosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pagosService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.pagosService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePagoDto: UpdatePagoDto) {
-    return this.pagosService.update(+id, updatePagoDto);
-  }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pagosService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.pagosService.remove(id);
+  }
+
+  @Get('/cuota/:cuotaId')
+  findByCuota(@Param('cuotaId') cuotaId: string){
+    return this.pagosService.findByCuota(+cuotaId)
   }
 }

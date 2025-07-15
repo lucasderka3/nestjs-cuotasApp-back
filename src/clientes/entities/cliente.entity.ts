@@ -1,5 +1,5 @@
 import { Cuota } from "src/cuotas/entities/cuota.entity";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany } from "typeorm";
 
 
 @Entity()
@@ -20,7 +20,7 @@ export class Cliente {
     @Column( {nullable: true} )
     telefono: string;
 
-    @Column( {type: 'date'} )
+    @CreateDateColumn( {type: 'timestamp'} )
     fecha_alta: Date;
     
     @Column( {default: true} )

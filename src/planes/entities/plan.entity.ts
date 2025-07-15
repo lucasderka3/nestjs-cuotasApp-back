@@ -11,7 +11,7 @@ export class Plan {
     nombre: string;
 
     @Column('text', { nullable: true })
-    description: string;
+    descripcion: string;
 
     @Column('decimal', { precision: 10, scale: 2})
     precio: number;

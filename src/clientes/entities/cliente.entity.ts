@@ -1,5 +1,6 @@
 import { Cuota } from "src/cuotas/entities/cuota.entity";
-import { Column, CreateDateColumn, Entity, OneToMany } from "typeorm";
+import { Pago } from "src/pagos/entities/pago.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany } from "typeorm";
 
 
 @Entity()
@@ -28,5 +29,8 @@ export class Cliente {
 
     @OneToMany(() => Cuota, (cuota) => cuota.cliente)
     cuotas: Cuota[];
+
+    @OneToMany(() => Pago, (pago) => pago.cliente)
+    pagos: Pago[]
 
 }

@@ -3,14 +3,14 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 export class CreateClienteDto {
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({message: 'El nombre es obligatorio.'})
     nombre: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({message: 'El apellido es obligatorio.'})
     apellido: string;
 
-    @IsEmail()
+    @IsEmail({}, {message: 'El email no es valido.'})
     email: string;
 
     @IsOptional()

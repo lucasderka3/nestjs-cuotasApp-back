@@ -16,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: "root",
       database: "db_cuotasApp",
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     ClientesModule, PlanesModule, CuotasModule, PagosModule],
   controllers: [],

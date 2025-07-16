@@ -9,7 +9,10 @@ services:
       MYSQL_DATABASE: db_cuotasApp
       MYSQL_USER: user_crud
       MYSQL_PASSWORD: root
-    volumes:
-      - ./mysql:/var/lib/mysql
     ports:
       - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

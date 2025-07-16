@@ -2,9 +2,9 @@ import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } 
 
 export class CreatePagoDto {
 
-    @IsNumber()
-    @IsPositive()
-    monto: number;
+    // @IsNumber()
+    // @IsPositive()
+    // monto: number;
 
     @IsString()
     @IsNotEmpty()

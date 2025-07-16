@@ -22,6 +22,16 @@ export class ClientesController {
     return this.clientesService.findOne(id);
   }
 
+  @Get(':id/cuotas')
+  obtenerCuotas(@Param('id') id:number){
+    return this.clientesService.obtenerCuotasDelCliente(id);
+  }
+
+  @Get(':id/pagos')
+  obtenerPagos(@Param('id') id:number){
+    return this.clientesService.obtenerPagosDelCliente(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateClienteDto: UpdateClienteDto) {
     return this.clientesService.update(id, updateClienteDto);

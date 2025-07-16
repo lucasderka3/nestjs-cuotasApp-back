@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePagoDto } from './dto/create-pago.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pago } from './entities/pago.entity';
@@ -20,28 +20,41 @@ export class PagosService {
     
     const cuota = await this.cuotaRepository.findOne({
       where: {id: createPagoDto.cuotaId},
-      relations: ['pagos']
+      relations: ['pagos', 'cliente', 'plan']
     })
 
     if(!cuota) {
       throw new NotFoundException('Cuota no encontrada')
     }
 
+    if(cuota.pagada){
+      throw new BadRequestException('La cuota ya se encuentra como pagada. No se pueden registrar mas pagos para esta cuota.')
+    }
+
+    const pagosPrevios = cuota.pagos || [];
+    const totalPagado = pagosPrevios.reduce((sum, p) => sum + p.monto,0)
+    const montoRestante = cuota.monto - totalPagado;
+
+    if(montoRestante <= 0){
+      throw new BadRequestException('No hay saldo pendiente para esta cuota')
+    }
+
+
     const nuevoPago = this.pagoRepository.create({
       cuota,
+      cliente: cuota.cliente,
       fecha: createPagoDto.fecha ? new Date(createPagoDto.fecha) : new Date(),
-      monto: createPagoDto.monto,
+      monto: montoRestante,
       metodoPago: createPagoDto.metodoPago,
       observaciones: createPagoDto.observaciones
     });
 
     await this.pagoRepository.save(nuevoPago);
+    
 
-    const totalPagado = cuota.pagos.reduce((sum, p) => sum + p.monto, 0) + createPagoDto.monto;
-
-    if(totalPagado >= cuota.monto && !cuota.pagada){
+    if(totalPagado + montoRestante >= cuota.monto && !cuota.pagada){
       cuota.pagada = true;
-      cuota.fechaPago = new Date;
+      cuota.fechaPago = new Date();
       await this.cuotaRepository.save(cuota);
     }
 

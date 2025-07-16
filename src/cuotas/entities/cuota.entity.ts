@@ -1,12 +1,12 @@
 import { Cliente } from "src/clientes/entities/cliente.entity";
 import { Pago } from "src/pagos/entities/pago.entity";
 import { Plan } from "src/planes/entities/plan.entity";
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Cuota {
 
-    @Column({primary: true, generated:true})
+    @PrimaryGeneratedColumn()
     id: number;
 
     @ManyToOne(() => Cliente, (cliente) => cliente.cuotas, {eager: true})

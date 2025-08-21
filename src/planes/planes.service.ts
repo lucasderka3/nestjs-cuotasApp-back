@@ -19,7 +19,7 @@ export class PlanesService {
       nombre: createPlaneDto.nombre,
       descripcion: createPlaneDto.descripcion,
       precio: createPlaneDto.precio,
-      frecuencia_pago: createPlaneDto.frecuenciaPago,
+      frecuencia_pago: createPlaneDto.frecuencia_pago,
       activo: true
     })
 
@@ -37,6 +37,12 @@ export class PlanesService {
     const plan = await this.planRepository.findOne({ where: { id } })
     if(!plan) throw new NotFoundException('Plan no encontrado')
     return plan;
+  }
+
+  async update(id: number, updatePlaneDto: UpdatePlaneDto){
+    const plan = await this.findOne(id);
+    Object.assign(plan, updatePlaneDto);
+    return this.planRepository.save(plan);
   }
 
   async remove(id: number) {

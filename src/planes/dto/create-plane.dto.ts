@@ -16,7 +16,7 @@ export class CreatePlaneDto {
 
     @IsString()
     @IsNotEmpty()
-    frecuenciaPago: string;
+    frecuencia_pago: string;
 
 
 }

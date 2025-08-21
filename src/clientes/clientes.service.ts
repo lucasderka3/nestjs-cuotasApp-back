@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,8 +22,15 @@ export class ClientesService {
   ){}
 
   async create(createClienteDto: CreateClienteDto) {
-    const nuevoCliente = await this.clienteRepository.create(createClienteDto)
-    return this.clienteRepository.save(nuevoCliente);
+    const existeCliente = await this.clienteRepository.findOne({where: {dni: createClienteDto.dni}})
+    
+    if(existeCliente){
+      throw new BadRequestException(`Ya existe un cliente con el DNI ${createClienteDto.dni}`)
+    } else{
+      const nuevoCliente = await this.clienteRepository.create(createClienteDto)
+      return this.clienteRepository.save(nuevoCliente);
+    }
+
   }
 
   async findAll() {

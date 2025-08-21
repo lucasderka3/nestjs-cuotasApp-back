@@ -15,6 +15,9 @@ export class Cliente {
     @Column()
     apellido: string;
 
+    @Column({unique: true})
+    dni: string;
+
     @Column( {unique: true} )
     email: string;
 

@@ -4,6 +4,8 @@ import { PlanesModule } from './planes/planes.module';
 import { CuotasModule } from './cuotas/cuotas.module';
 import { PagosModule } from './pagos/pagos.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -18,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: false,
     }),
-    ClientesModule, PlanesModule, CuotasModule, PagosModule],
+    ClientesModule, PlanesModule, CuotasModule, PagosModule, UsersModule, AuthModule],
   controllers: [],
   providers: [],
 })
